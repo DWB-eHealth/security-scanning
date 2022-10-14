@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 #Install Trivy
 sudo apt-get install wget apt-transport-https gnupg lsb-release
