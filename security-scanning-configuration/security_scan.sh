@@ -1,12 +1,9 @@
 #!/bin/bash
 set -e
 
-#Install Trivy
-sudo apt-get install wget apt-transport-https gnupg lsb-release
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-sudo apt-get update
-sudo apt-get install trivy
+#Pull Trivy Docker Image
+echo "Pulling trivy docker image"
+docker pull aquasec/trivy
 
 #Add . to the target path if there are no target paths specified
 TARGET_PATHS=("$@")
@@ -20,9 +17,11 @@ do
 echo "Started Scanning $TARGET_PATH"
 if test -f "$TARGET_PATH/trivy-secret.yaml" ;
 then
-trivy --exit-code 1 fs --security-checks secret "$TARGET_PATH" --secret-config  "$TARGET_PATH/trivy-secret.yaml"
+docker container run -v $(pwd):/temp aquasec/trivy --exit-code 1 fs  --security-checks secret "/temp/$TARGET_PATH" --secret-config  "temp/$TARGET_PATH/trivy-secret.yaml"
 else
-trivy --exit-code 1 fs --security-checks secret "$TARGET_PATH"
+docker container run -v $(pwd):/temp aquasec/trivy --exit-code 1 fs  --security-checks secret "/temp/$TARGET_PATH"
 fi
 echo "Completed Scanning $TARGET_PATH"
 done
+
+
