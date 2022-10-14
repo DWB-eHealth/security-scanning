@@ -7,6 +7,6 @@ for TARGET_PATH in "${TARGET_PATHS[@]}";
 do
 echo "Started Scanning $TARGET_PATH"
 echo $TARGET_PATH
-trivy --exit-code 1 fs "$TARGET_PATH"
+trivy --exit-code 1 fs --security-checks secret "$TARGET_PATH"
 echo "Completed Scanning $TARGET_PATH"
 done
