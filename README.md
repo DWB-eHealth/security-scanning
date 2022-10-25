@@ -7,6 +7,8 @@
   * Ideally, we should not ignore the entire file because it might expose some other actual secret that is present in the same file.
   * To ignore a false positive in a specific repository, we need to create a file named exactly *trivy-secret.yaml* at the root level of the repository.
   * The content of the created file should looks exactly the below code
+  
+  ```trivy-secret.yaml```
   ```  
   allow-rules:
     - id: skip-regex
@@ -19,3 +21,8 @@
   * Ofcourse, we can change the id and description according to our use case.
   * To ignore the false positive, we need to add the specific false positive as a regex in the skip-regex rule and if we need to ignore
   the entire file, then we need to add the path of that file as a regex in the skip-files rule.
+  
+  ## EXTENDING TO SECURITY SCANNING
+   * If we are extending this to scan for vulnerabilities as well, then we just need to modify the trivy command that is present in the shell script *security_scan.sh*
+  
+  
